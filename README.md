@@ -1,199 +1,35 @@
-:root {
-  color: #1f2937;
-  background: #f4f8ff;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+# พ่อบ้านเทียบราคา (phobaan-price-compare)
 
-* {
-  box-sizing: border-box;
-}
+เว็บแอปเทียบราคาสินค้าใช้ในบ้านต่อหน่วย (บาท/ลิตร หรือ บาท/กก.) เพื่อหาตัวเลือกที่คุ้มที่สุด
+สร้างด้วย React + Vite
 
-html, body, #root {
-  margin: 0;
-  min-height: 100%;
-  min-width: 100%;
-}
+## รันบนเครื่อง
 
-body {
-  background: linear-gradient(135deg, #eef6ff 0%, #f9fbff 40%, #ecfdf5 100%);
-  color: #1f2937;
-}
+```bash
+npm install
+npm run dev        # เปิด http://localhost:3000
+```
 
-button,
-input,
-select {
-  font: inherit;
-}
+## Build
 
-.page-shell {
-  min-height: 100vh;
-  padding: 32px 20px;
-}
+```bash
+npm run build      # ผลลัพธ์อยู่ในโฟลเดอร์ dist/
+npm run preview    # ทดลองเปิดไฟล์ที่ build แล้ว
+```
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+## Deploy ขึ้น GitHub Pages
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
+1. Merge โค้ดเข้า branch `main`
+2. ไปที่ **Settings → Pages → Build and deployment → Source** แล้วเลือก **GitHub Actions**
+3. Workflow `.github/workflows/deploy.yml` จะ build และ deploy ให้อัตโนมัติทุกครั้งที่ push เข้า `main`
+4. เว็บจะอยู่ที่ `https://<username>.github.io/phobaan-price-compare/`
 
-.eyebrow {
-  margin: 0 0 6px;
-  color: #2563eb;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+## โครงสร้างไฟล์
 
-h1 {
-  margin: 0;
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  color: #0f172a;
-}
-
-.primary-btn,
-.remove-btn {
-  border: none;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  padding: 12px 18px;
-  font-weight: 700;
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
-}
-
-.primary-btn:hover,
-.remove-btn:hover {
-  transform: translateY(-1px);
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.product-card {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #dbeafe;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-  padding: 20px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.card-header h2 {
-  margin: 0;
-  color: #1e3a8a;
-  font-size: 1.15rem;
-}
-
-.remove-btn {
-  background: #fee2e2;
-  color: #b91c1c;
-  padding: 8px 12px;
-  font-weight: 700;
-}
-
-.field-group {
-  margin-bottom: 14px;
-}
-
-.field-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #374151;
-  margin-bottom: 8px;
-}
-
-input,
-select {
-  width: 100%;
-  border: 1px solid #cbd5e1;
-  background: white;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 1rem;
-  color: #0f172a;
-  outline: none;
-}
-
-input:focus,
-select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-}
-
-.two-cols {
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  gap: 10px;
-}
-
-.result-box {
-  margin-top: 12px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: #1d4ed8;
-  font-weight: 700;
-  min-height: 44px;
-}
-
-.summary-box {
-  margin-top: 28px;
-  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
-  border: 1px solid #bbf7d0;
-  border-radius: 18px;
-  padding: 22px 20px;
-}
-
-.summary-box h2 {
-  margin: 0 0 14px;
-  color: #166534;
-}
-
-.summary-box p {
-  margin: 10px 0;
-  font-size: 1.04rem;
-  color: #14532d;
-  line-height: 1.6;
-}
-
-@media (max-width: 640px) {
-  .topbar {
-    align-items: flex-start;
-  }
-
-  .two-cols {
-    grid-template-columns: 1fr;
-  }
-}
+```
+index.html          หน้า HTML หลัก
+src/main.jsx        จุดเริ่มของ React
+src/App.jsx         ตรรกะและหน้าจอเทียบราคา
+src/styles.css      สไตล์ทั้งหมด
+vite.config.js      ตั้งค่า Vite
+```
