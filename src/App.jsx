@@ -142,19 +142,16 @@ function App() {
       })
       .filter(Boolean)
 
-    if (validProducts.length === 0) {
-      return {
-        cheapest: null,
-        ranked: [],
-      }
-    }
+    const groups = ['volume', 'weight']
+      .map((type) => {
+        const ranked = validProducts
+          .filter((product) => product.type === type)
+          .sort((a, b) => a.pricePerUnit - b.pricePerUnit)
+        return { type, ranked, cheapest: ranked[0] ?? null }
+      })
+      .filter((group) => group.ranked.length > 0)
 
-    const sorted = [...validProducts].sort((a, b) => a.pricePerUnit - b.pricePerUnit)
-
-    return {
-      cheapest: sorted[0],
-      ranked: sorted,
-    }
+    return { groups }
   }, [products])
 
   return (
@@ -254,18 +251,28 @@ function App() {
 
         <section className="summary-box">
           <h2>📊 สรุปผลการเปรียบเทียบ</h2>
-          {summary.cheapest ? (
+          {summary.groups.length > 0 ? (
             <>
-              <p>
-                <strong>คุ้มที่สุด:</strong> {summary.cheapest.name} -{' '}
-                {formatPrice(summary.cheapest.pricePerUnit)} {summary.cheapest.label}
-              </p>
-              <p>
-                <strong>ราคาถูกสุด:</strong>{' '}
-                {summary.ranked
-                  .map((item, index) => `${index + 1}. ${item.name} (${formatPrice(item.pricePerUnit)} ${item.label})`)
-                  .join(' | ')}
-              </p>
+              {summary.groups.length > 1 && (
+                <p className="summary-note">
+                  สินค้าวัดตามปริมาตรและน้ำหนักเทียบกันตรง ๆ ไม่ได้ จึงแยกจัดอันดับตามประเภทการวัด
+                </p>
+              )}
+              {summary.groups.map((group) => (
+                <div key={group.type} className="summary-group">
+                  <h3>{group.type === 'volume' ? 'วัดตามปริมาตร' : 'วัดตามน้ำหนัก'}</h3>
+                  <p>
+                    <strong>คุ้มที่สุด:</strong> {group.cheapest.name} -{' '}
+                    {formatPrice(group.cheapest.pricePerUnit)} {group.cheapest.label}
+                  </p>
+                  <p>
+                    <strong>อันดับความคุ้ม:</strong>{' '}
+                    {group.ranked
+                      .map((item, index) => `${index + 1}. ${item.name} (${formatPrice(item.pricePerUnit)} ${item.label})`)
+                      .join(' | ')}
+                  </p>
+                </div>
+              ))}
             </>
           ) : (
             <p>กรุณากรอกข้อมูลสินค้าและราคาให้ครบถ้วนก่อนสรุปผล</p>
